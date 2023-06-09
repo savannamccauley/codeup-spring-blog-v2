@@ -1,11 +1,12 @@
-package com.codeup.codeupspringblogv2.controller;
+package com.codeup.codeupspringblogv2.models;
 
+import com.codeup.codeupspringblogv2.models.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.stereotype.Controller;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -20,7 +21,7 @@ public class Post {
 
     @Column(nullable = false,length = 225)
     private String title;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String body;
     @ManyToOne
     @JoinColumn(name = "user_id")

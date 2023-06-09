@@ -1,6 +1,6 @@
 package com.codeup.codeupspringblogv2.services;
 
-import com.codeup.codeupspringblogv2.controller.Post;
+import com.codeup.codeupspringblogv2.models.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
         public void prepareAndSend(Post post, String subject, String body) {
             SimpleMailMessage msg = new SimpleMailMessage();
             msg.setFrom(from);
-            msg.setTo("savanna@gov.com");
+            msg.setTo(post.getUser().getEmail());
             msg.setSubject(subject);
             msg.setText(body + post.getTitle());
 

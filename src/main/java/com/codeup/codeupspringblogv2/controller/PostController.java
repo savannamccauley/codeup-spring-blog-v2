@@ -1,14 +1,15 @@
 package com.codeup.codeupspringblogv2.controller;
 
+import com.codeup.codeupspringblogv2.models.Post;
+import com.codeup.codeupspringblogv2.models.User;
 import com.codeup.codeupspringblogv2.repositories.PostRepository;
 import com.codeup.codeupspringblogv2.repositories.UserRepository;
 import com.codeup.codeupspringblogv2.services.EmailService;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class PostController {
@@ -17,13 +18,30 @@ public class PostController {
 
     private final EmailService emailService;
 
+    private final PasswordEncoder passwordEncoder;
 
-    public PostController(PostRepository postDao, UserRepository userDao, EmailService emailService) {
+
+    public PostController(PostRepository postDao, UserRepository userDao, EmailService emailService, PasswordEncoder passwordEncoder) {
         this.postDao = postDao;
         this.userDao = userDao;
         this.emailService = emailService;
+        this.passwordEncoder = passwordEncoder;
 
     }
+    @GetMapping("/sign-up")
+    public String showSignupForm(Model model){
+        model.addAttribute("user", new User());
+        return "users/sign-up";
+    }
+
+    @PostMapping("/sign-up")
+    public String saveUser(@ModelAttribute User user){
+        String hash = passwordEncoder.encode(user.getPassword());
+        user.setPassword(hash);
+        userDao.save(user);
+        return "redirect:/login";
+    }
+
 
     @GetMapping("/posts")
     public String allPost(Model model) {
@@ -46,7 +64,7 @@ public class PostController {
 
     @PostMapping("/posts/create")
     public String createNewPost(@ModelAttribute Post post) {
-        User user = userDao.findById(1L).get();
+        User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         post.setUser(user);
         postDao.save(post);
 

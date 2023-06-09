@@ -1,4 +1,4 @@
-package com.codeup.codeupspringblogv2.controller;
+package com.codeup.codeupspringblogv2.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,6 +15,7 @@ import java.util.List;
 @Entity
 @Table(name="user")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,5 +29,12 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     List<Post> posts;
+
+    public User(User copy){
+        id=copy.id;
+        email = copy.email;
+        username = copy.username;
+        password = copy.password;
+    }
 
 }
