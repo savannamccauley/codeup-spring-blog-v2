@@ -145,11 +145,11 @@ public class PostsIntegrationTests {
                         post("/posts/create").with(csrf())
                                 .session((MockHttpSession) httpSession)
                                 .param("title", "ad to be deleted")
-                                .param("description", "won't last long"))
+                                .param("body", "won't last long"))
                 .andExpect(status().is3xxRedirection());
 
         // Get the recent Ad that matches the title
-        Post existingPost = postsDao.findByTitle("post to be deleted");
+        Post existingPost = postsDao.findByTitle("ads to be deleted");
 
         // Makes a Post request to /ads/{id}/delete and expect a redirection to the Ads index
         this.mvc.perform(
